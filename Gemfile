@@ -5,3 +5,4 @@ gem 'rspec'
 gem 'pry'
 gem 'fileutils'
 gem 'sinatra-contrib'
+gem('capybara')

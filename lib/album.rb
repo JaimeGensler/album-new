@@ -9,11 +9,12 @@ class Album
     end
 
     def save
-        @@albums[self.id] = self
+        @@albums[@id] = self
     end
 
     def update(new_vals)
         new_vals.each { |(key, val)| send("#{key}=".to_sym, (val == "") ? send(key) : val ) }
+        self
     end
 
     def delete
@@ -47,10 +48,14 @@ class Album
     end
 
     def self.search(type, term)
-        @@albums.values.select {|al| al.send(type).to_s.downcase.include? term.downcase}[0]
+        @@albums.merge(@@sold_albums).values.select {|al| al.send(type).to_s.downcase.include? term.downcase}[0]
     end
 
     def self.sort()
         @@albums.values.sort {|a, b| a.name <=> b.name}
+    end
+
+    def songs
+        Song.find_by_album(@id)
     end
 end

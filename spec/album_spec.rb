@@ -1,10 +1,11 @@
 require 'rspec'
 require 'album'
+require 'song'
 
 describe 'Album' do
     before(:each) do
         Album.clear()
-        @album1 = Album.new("Giant Steps").save
+        @album1 = Album.new("Giant Steps", 1960, "Jazz", "John Coltrane").save
         @album2 = Album.new("Fashion Nugget").save
         @album3 = Album.new("Cornbread").save
     end
@@ -47,12 +48,24 @@ describe 'Album' do
     end
     describe('.search') do
         it("searches an album by name") do
-            expect(Album.search(:name, "giant")).to(eq(@album1))
+            alb = Album.search(:name, "giant")
+            expect(alb.name).to(eq("Giant Steps"))
+            expect(alb.year).to(eq(1960))
+            expect(alb.genre).to(eq("Jazz"))
+            expect(alb.artist).to(eq("John Coltrane"))
         end
     end
     describe('.sort') do
         it("sorts all albums by name in alphebetical order") do
             expect(Album.sort[0].name).to(eq('Cornbread'))
+        end
+    end
+
+    describe('#songs') do
+        it("returns an album's songs") do
+            song1 = Song.new("Naima", @album1.id).save
+            song2 = Song.new("Cousin Mary", @album1.id).save
+            expect(@album1.songs).to(eq([song1, song2]))
         end
     end
 end
