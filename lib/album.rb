@@ -1,11 +1,11 @@
 class Album
     attr_accessor :name, :year, :genre, :artist, :id
-    def initialize(name, year = nil, genre = nil, artist = nil, id = nil)
+    def initialize(name, year = nil, genre = nil, artist = nil)
         @name = name
         @year = year
         @genre = genre
         @artist = artist
-        @id = id || @@total_rows += 1
+        @id = (@@total_rows += 1)
     end
 
     def save
@@ -22,7 +22,7 @@ class Album
 
     def sell
         delete
-        @@sold_albums[@id] = Album.new(@name, @id)
+        @@sold_albums[@id] = self
     end
 
     #class methods
@@ -47,15 +47,10 @@ class Album
     end
 
     def self.search(type, term)
-        @@albums.merge(@@sold_albums).values.select {|al| al.send(type).to_s.downcase.include? term.downcase}[0]
+        @@albums.values.select {|al| al.send(type).to_s.downcase.include? term.downcase}[0]
     end
 
     def self.sort()
         @@albums.values.sort {|a, b| a.name <=> b.name}
-    end
-
-    #does something maybe
-    def ==(album_to_compare)
-        @name == album_to_compare.name
     end
 end
