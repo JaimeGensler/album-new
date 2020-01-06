@@ -17,7 +17,7 @@ get '/albums' do
     erb :albums
 end
 post '/albums' do
-    Album.new(*params.values)
+    Album.new(params)
     redirect to '/albums'
 end
 
