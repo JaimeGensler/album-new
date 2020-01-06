@@ -4,8 +4,8 @@ class Song
 
     def initialize(attributes)
         @name = attributes[:name]
-        @album_id = attributes[:album_id]
-        @id = attributes[:id]
+        @album_id = attributes[:album_id].to_i
+        @id = attributes[:id].to_i
     end
 
     def save
@@ -32,8 +32,6 @@ class Song
     end
     def self.find(id)
         song = self.keys_to_sym(DB.exec("SELECT * FROM songs WHERE id = #{id};").first)
-        song[:id] = song[:id].to_i
-        song[:album_id] = song[:album_id].to_i
         Song.new(song)
     end
     def self.clear
@@ -42,8 +40,6 @@ class Song
     def self.find_by_album(alb_id)
         DB.exec("SELECT * FROM songs WHERE album_id = #{alb_id};").map do |song|
             attributes = self.keys_to_sym(song)
-            attributes[:id] = song[:id].to_i
-            song[:album_id] = song[:album_id].to_i
             Song.new(attributes)
         end
     end

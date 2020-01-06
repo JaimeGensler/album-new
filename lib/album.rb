@@ -39,9 +39,8 @@ class Album
         DB.exec("DELETE FROM albums *;")
     end
     def self.find(search_id)
-        album = self.keys_to_sym(DB.exec("SELECT * FROM albums WHERE id = #{search_id};").first)
-        album[:id] = album[:id].to_i
-        Album.new(album)
+        attributes = self.keys_to_sym(DB.exec("SELECT * FROM albums WHERE id = #{search_id};").first)
+        Album.new(attributes)
     end
     # def self.search(type, term)
     #     @@albums.merge(@@sold_albums).values.select {|al| al.send(type).to_s.downcase.include? term.downcase}[0]
@@ -57,7 +56,7 @@ class Album
     private
     def self.keys_to_sym(str_hash)
         str_hash.reduce({}) do |acc, (key, val)|
-            acc[key.to_sym] = val
+            acc[key.to_sym] = (['id'].include? key) ? val.to_i : val
             acc
         end
     end

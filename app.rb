@@ -30,10 +30,7 @@ get '/albums/:id' do
     erb :albums_ID
 end
 patch '/albums/:id' do
-    album = Album.search(:id, params[:id])
-    params.delete(:_method)
-    params.delete(:id)
-    album.update(params)
+    Album.search(:id, params[:id]).update(params)
     redirect to '/albums/:id'
 end
 delete '/albums/:id' do
@@ -47,24 +44,19 @@ get '/albums/:id/edit' do
 end
 
 #////////////////// Songs routes /////////////////////
-post('/albums/:id/songs') do
-    @album = Album.find(params[:id].to_i)
-    Song.new(params[:song_name], @album.id).save
-    erb(:albums_ID)
+post '/albums/:id/songs' do
+    params[:album_id] = Album.find(params[:id].to_i).id
+    Song.new(params).save
+    redirect to '/albums/:id'
 end
 
-get('/albums/:id/songs/:song_id') do
+get '/albums/:id/songs/:song_id' do
     @song = Song.find(params[:song_id].to_i)
-    erb(:album_ID_song_ID)
+    erb :album_ID_song_ID
 end
-patch('/albums/:id/songs/:song_id') do
-    @album = Album.find(params[:id].to_i)
-    song = Song.find(params[:song_id].to_i)
-    params.delete(:_method)
-    params.delete(:id)
-    params.delete(:song_id)
-    song.update(params)
-    erb(:albums_ID)
+patch '/albums/:id/songs/:song_id' do
+    Song.find(params[:song_id].to_i).update(params)
+    redirect to '/albums/:id/songs/:song_id'
 end
 
 delete('/albums/:id/songs/:song_id') do
