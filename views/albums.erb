@@ -14,11 +14,6 @@
         <td><a href="/albums/<%= album.id %>"><%= album.name %></a></td>
         <td><a href="/albums/<%= album.id %>"><%= album.artist %></a></td>
         <td>
-            <form action="/albums" method="post">
-                <input name="_method" type="hidden" value="patch">
-                <input name="buyme" type="hidden" value="<%= album.id %>">
-                <button type="submit">Buy Album</button>
-            </form>
         </td>
     </tr>
     <% end %>
@@ -36,14 +31,3 @@
     </div>
     <button type="submit" class="btn">Go!</button>
 </form>
-
-<h3>Albums Sold</h3>
-<% if @sold.any? %>
-<ul>
-    <% @sold.each do |album| %>
-    <li><a href="/albums/<%= album.id %>"><%= album.name %></a></li>
-    <% end %>
-</ul>
-<% else %>
-<p>There are currently no records to display.</p>
-<% end %>

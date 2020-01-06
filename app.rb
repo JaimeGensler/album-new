@@ -3,57 +3,45 @@ require 'sinatra/reloader'
 require './lib/album'
 require './lib/song'
 require 'pry'
+require 'pg'
+
+DB = PG.connect({:dbname => "record_store"})
 also_reload 'lib/**/*.rb'
 
-get('/') do
-    @albums = Album.all
-    @sold = Album.sold
-    erb(:albums)
+get '/' do
+    redirect to '/albums'
 end
 
-get('/albums') do
+get '/albums' do
     @albums = Album.all
-    @sold = Album.sold
-    erb(:albums)
+    erb :albums
 end
-post('/albums') do
-    @album = Album.new(*params.values).save
-    @albums = Album.all
-    @sold = Album.sold
-    erb(:albums)
-end
-patch('/albums') do
-    @album = Album.search(:id, params[:buyme]).sell
-    @sold = Album.sold
-    @albums = Album.all
-    erb(:albums)
+post '/albums' do
+    Album.new(*params.values)
+    redirect to '/albums'
 end
 
-get('/albums/new') do
-    erb(:albums_new)
+get '/albums/new' do
+    erb :albums_new
 end
 
-get('/albums/:id') do
+get '/albums/:id' do
     @album = Album.search(:id, params[:id])
-    erb(:albums_ID)
+    erb :albums_ID
 end
-patch('/albums/:id') do
+patch '/albums/:id' do
     album = Album.search(:id, params[:id])
     params.delete(:_method)
     params.delete(:id)
     album.update(params)
-    @albums = Album.all
-    @sold = Album.sold
-    erb(:albums)
+    redirect to '/albums/:id'
 end
-delete('/albums/:id') do
-    @album = Album.find(params[:id].to_i).delete
-    @albums = Album.all
-    @sold = Album.sold
-    erb(:albums)
+delete '/albums/:id' do
+    Album.find(params[:id].to_i).delete
+    redirect to '/albums'
 end
 
-get('/albums/:id/edit') do
+get '/albums/:id/edit' do
     @album = Album.search(:id, params[:id])
     erb(:albums_ID_edit)
 end
