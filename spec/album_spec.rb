@@ -22,10 +22,12 @@ describe 'Album' do
         end
     end
     describe '#delete' do
-        it 'deletes an album by id' do
+        it 'deletes an album by id and all songs belong to album' do
             album = Album.new({name: 'Cornbread'}).save
+            song = Song.new({name: 'Naima', album_id: album.id}).save
             album.delete
             expect(Album.all).not_to include(album)
+            expect(Song.find(song.id)).to eq(nil)
         end
     end
     # describe('#songs') do

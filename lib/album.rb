@@ -23,6 +23,7 @@ class Album
     end
     def delete
         DB.exec("DELETE FROM albums WHERE id = #{@id};")
+        DB.exec("DELETE FROM songs WHERE album_id = #{@id};")
     end
     def ==(compare)
         (@name == compare.name) && (@year == compare.year) && (@genre == compare.genre) && (@artist == compare.artist)
@@ -42,9 +43,6 @@ class Album
         attributes = self.keys_to_sym(DB.exec("SELECT * FROM albums WHERE id = #{search_id};").first)
         Album.new(attributes)
     end
-    # def self.search(type, term)
-    #     @@albums.merge(@@sold_albums).values.select {|al| al.send(type).to_s.downcase.include? term.downcase}[0]
-    # end
     # def self.sort
     #     @@albums.values.sort {|a, b| a.name <=> b.name}
     # end

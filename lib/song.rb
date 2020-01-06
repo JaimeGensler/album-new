@@ -15,12 +15,13 @@ class Song
     def update(new_attrs)
         @name = new_attrs[:name]
         @album_id = new_attrs[:album_id]
-        DB.exec("UPDATE songs SET name = '#{@name}', album_id = #{@album_id} WHERE id = #{@id};")
+        DB.exec("UPDATE songs SET name = '#{@name}' WHERE id = #{@id};")
     end
     def delete
         DB.exec("DELETE FROM songs WHERE id = #{@id};")
     end
     def ==(compare)
+        return false if (compare.nil?)
         (@name == compare.name) && (@album_id == compare.album_id)
     end
 
@@ -30,9 +31,10 @@ class Song
             Song.new(attributes)
         end
     end
-    def self.find(id)
-        song = self.keys_to_sym(DB.exec("SELECT * FROM songs WHERE id = #{id};").first)
-        Song.new(song)
+    def self.find(search_id)
+        song = DB.exec("SELECT * FROM songs WHERE id = #{search_id};").first
+        return nil if (song.nil?)
+        Song.new(self.keys_to_sym(song))
     end
     def self.clear
         DB.exec("DELETE FROM songs *;")
