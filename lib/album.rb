@@ -25,30 +25,23 @@ class Album
         DB.exec("DELETE FROM albums WHERE id = #{@id};")
         DB.exec("DELETE FROM songs WHERE album_id = #{@id};")
     end
+    def songs
+      Song.find_by_album(@id)
+    end
     def ==(compare)
         (@name == compare.name) && (@year == compare.year) && (@genre == compare.genre) && (@artist == compare.artist)
     end
 
     #class methods
     def self.all
-        DB.exec("SELECT * FROM albums;").map do |album|
-            attributes = self.keys_to_sym(album)
-            Album.new(attributes)
-        end
+        DB.exec("SELECT * FROM albums;").map { |album| Album.new(self.keys_to_sym(album)) }
     end
     def self.clear
         DB.exec("DELETE FROM albums *;")
     end
     def self.find(search_id)
-        attributes = self.keys_to_sym(DB.exec("SELECT * FROM albums WHERE id = #{search_id};").first)
-        Album.new(attributes)
-    end
-    # def self.sort
-    #     @@albums.values.sort {|a, b| a.name <=> b.name}
-    # end
-
-    def songs
-        Song.find_by_album(@id)
+        attributes = DB.exec("SELECT * FROM albums WHERE id = #{search_id};").first
+        Album.new(self.keys_to_sym(attributes))
     end
 
     private

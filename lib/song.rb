@@ -27,7 +27,7 @@ class Song
 
     def self.all
         DB.exec("SELECT * FROM songs;").map do |song|
-            attributes = keys_to_sym(song)
+            attributes = self.keys_to_sym(song)
             Song.new(attributes)
         end
     end
@@ -36,7 +36,7 @@ class Song
         return nil if (song.nil?)
         Song.new(self.keys_to_sym(song))
     end
-    def self.clear
+    def self.clearss
         DB.exec("DELETE FROM songs *;")
     end
     def self.find_by_album(alb_id)

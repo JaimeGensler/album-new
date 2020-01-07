@@ -54,18 +54,4 @@ describe 'Album' do
             expect(Album.find(album.id)).to eq(album)
         end
     end
-    # describe('.search') do
-    #     it("searches an album by name") do
-    #         alb = Album.search(:name, "giant")
-    #         expect(alb.name).to(eq("Giant Steps"))
-    #         expect(alb.year).to(eq(1960))
-    #         expect(alb.genre).to(eq("Jazz"))
-    #         expect(alb.artist).to(eq("John Coltrane"))
-    #     end
-    # end
-    # describe('.sort') do
-    #     it("sorts all albums by name in alphebetical order") do
-    #         expect(Album.sort[0].name).to(eq('Cornbread'))
-    #     end
-    # end
 end

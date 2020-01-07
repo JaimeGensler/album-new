@@ -26,16 +26,6 @@ end
 describe 'create an album path', {:type => :feature} do
     it 'creates an album and then goes to the album page' do
         visit('/albums')
-        click_on('Add a new album')
-        fill_in('name', :with => 'Yellow Submarine')
-        click_on('Go!')
-        expect(page).to have_content('Yellow Submarine')
-    end
-end
-
-describe 'create an album path', {:type => :feature} do
-    it 'creates an album and then goes to the album page' do
-        visit('/albums')
         save_and_open_page
         click_on('Add a new album')
         fill_in('name', :with => 'Yellow Submarine')
